@@ -1,0 +1,28 @@
+From d2a33817c4da6797dca3728c9cee5a61da5b74ef Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Thu, 7 Mar 2024 18:14:51 +0000
+Subject: [PATCH 1/4] co3d.download_dataset: fix imports
+
+download_dataset: use absolute imports
+
+...s.t. both `python -m co3d.download_dataset` and `python co3d/download_dataset.py` work
+---
+ co3d/download_dataset.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/co3d/download_dataset.py b/co3d/download_dataset.py
+index 36c9a94..141c1b2 100644
+--- a/co3d/download_dataset.py
++++ b/co3d/download_dataset.py
+@@ -7,7 +7,7 @@
+ 
+ import os
+ 
+-from dataset.download_dataset_impl import build_arg_parser, download_dataset
++from co3d.dataset.download_dataset_impl import build_arg_parser, download_dataset
+ 
+ 
+ DEFAULT_LINK_LIST_FILE = os.path.join(os.path.dirname(__file__), "links.json")
+-- 
+2.43.1
+

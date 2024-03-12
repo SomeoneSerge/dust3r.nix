@@ -1,0 +1,44 @@
+From d7edde7696fe8ef39b8b5578579d1e5f75a1bfb8 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Thu, 7 Mar 2024 18:19:54 +0000
+Subject: [PATCH 2/4] pyproject: add an entrypoint for download_dataset
+
+---
+ co3d/download_dataset.py | 6 +++++-
+ setup.py                 | 1 +
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/co3d/download_dataset.py b/co3d/download_dataset.py
+index 141c1b2..cd3a0e1 100644
+--- a/co3d/download_dataset.py
++++ b/co3d/download_dataset.py
+@@ -14,7 +14,7 @@ DEFAULT_LINK_LIST_FILE = os.path.join(os.path.dirname(__file__), "links.json")
+ DEFAULT_SHA256S_FILE = os.path.join(os.path.dirname(__file__), "co3d_sha256.json")
+ 
+ 
+-if __name__ == "__main__":
++def main():
+     parser = build_arg_parser("CO3D", DEFAULT_LINK_LIST_FILE, DEFAULT_SHA256S_FILE)
+     parser.add_argument(
+         "--single_sequence_subset",
+@@ -35,3 +35,7 @@ if __name__ == "__main__":
+         sha256s_file=str(args.sha256_file),
+         skip_downloaded_archives=not bool(args.redownload_existing_archives),
+     )
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/setup.py b/setup.py
+index ea1cd46..5a12813 100644
+--- a/setup.py
++++ b/setup.py
+@@ -23,4 +23,5 @@ setuptools.setup(
+         "tqdm",
+         "plyfile",
+     ],
++    entry_points={"console_scripts": ["co3d-download = co3d.download_dataset:main"]},
+ )
+-- 
+2.43.1
+

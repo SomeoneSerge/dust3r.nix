@@ -1,0 +1,17 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools" ]
+
+[project]
+name = "dust3r"
+version = "2024.03.04"
+
+# [project.scripts]
+
+# [tool.setuptools]
+# include-package-data = true
+
+# [tool.setuptools.package-data]
+# dust3r = [ "*.json"]
+
+[tool.setuptools.packages.find]
