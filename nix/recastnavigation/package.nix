@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # They vendor a broken copy of catch2
     (lib.cmakeBool "RECASTNAVIGATION_TESTS" false)
+
+    # habitat-sim wants to see private symbols:
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DDT_VIRTUAL_QUERYFILTER=1")
   ];
 
   meta = with lib; {
