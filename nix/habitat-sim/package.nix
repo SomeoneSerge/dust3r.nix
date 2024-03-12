@@ -8,6 +8,7 @@
   pip,
   setuptools,
   wheel,
+  pythonRelaxDepsHook,
   attrs,
   gitpython,
   imageio,
@@ -25,6 +26,17 @@
   glfw3,
   pybind11,
   rapidjson,
+  rapidjson-for-habitat ? rapidjson.overrideAttrs (oldAttrs: {
+    src = fetchFromGitHub {
+      inherit (oldAttrs.src) owner repo;
+      rev = "73063f5002612c6bf64fe24f851cd5cc0d83eef9"; # 2018
+      hash = "sha256-pfplYKp6kkTPcyOjbnFqmbTFt8NXKLjSVC0Wh9UNUIw=";
+    };
+    patches = lib.flip builtins.filter oldAttrs.patches (
+      # "Previously applied"
+      p: !(lib.isPath p && lib.hasSuffix "valgrind.diff" p)
+    );
+  }),
   assimp,
   corrade,
   magnum,
@@ -63,6 +75,7 @@ buildPythonPackage rec {
     pip
     setuptools
     wheel
+    pythonRelaxDepsHook
   ];
 
   buildInputs = [
@@ -71,7 +84,7 @@ buildPythonPackage rec {
     openexr
     glfw3
     pybind11
-    rapidjson
+    rapidjson-for-habitat
     assimp
     corrade
     magnum
@@ -105,6 +118,8 @@ buildPythonPackage rec {
     (lib.cmakeFeature "MAGNUMPLUGINS_INCLUDE_DIR" "${lib.getDev magnum-plugins}/include")
     (lib.cmakeFeature "MAGNUMBINDINGS_INCLUDE_DIR" "${lib.getDev magnum-bindings}/include")
   ];
+
+  pythonRelaxDeps = [ "numpy" ];
 
   pythonImportsCheck = [ "habitat_sim" ];
 
