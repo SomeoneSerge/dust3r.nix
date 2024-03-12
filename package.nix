@@ -31,7 +31,7 @@ buildPythonPackage {
       hasAnySuffices = name: builtins.any (ext: lib.hasSuffix ext name);
     in
     lib.pipe ./. [
-      (fs.gitTrackedWith { recurseSubmodules = true; })
+      fs.gitTracked
       (intersect (fs.fileFilter (file: !(file.hasExt "nix")) ./.))
       (intersect (fs.fileFilter (file: !(lib.hasPrefix "." file.name)) ./.))
       (intersect (
@@ -41,6 +41,7 @@ buildPythonPackage {
             ".img"
             ".pth"
             ".zip"
+            ".ipynb"
           ])
         ) ./.
       ))

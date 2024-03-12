@@ -1,0 +1,10 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [ "setuptools" ]
+
+[project]
+name = "croco"
+version = "2024.03.12"
+
+[tool.setuptools.packages.find]
+include = [ "croco*" ]
