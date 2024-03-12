@@ -22,30 +22,29 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-CMake-fix-write-correct-install-paths-in-the-.pc.patch
 
-    # "Multi-goal shortest path"
+    # "Adds multi start shortest path ..."
     (fetchpatch {
-      url = "https://github.com/recastnavigation/recastnavigation/commit/b9d9a9d8ba243f588f4534efe3759a5abbd21dcb.patch";
-      hash = "sha256-1thkQQ1kSUPHqVO1R46+v8soko0QLCWQN+hovTL2mdI=";
+      url = "https://github.com/recastnavigation/recastnavigation/commit/71db2688f2909e920aa95f806676a4983c9e0f2a.patch";
+      hash = "sha256-F2p18hvBycyVqp5C6kw52V9N2NVmffM7wwT845ZO8wE=";
     })
 
-    # Patches from: https://github.com/recastnavigation/recastnavigation/compare/main...erikwijmans:recastnavigation:master
+    # "Hacky fix for ESP hot fix"
+    (fetchpatch {
+      url = "https://github.com/recastnavigation/recastnavigation/commit/c1a0c3282e4ac7475257cfa208f200e064477884.patch";
+      hash = "sha256-JLU39Cgss3nWXy6L/8x02tz4+pM9vjap6RW4XiRdvx8=";
+    })
 
-    # "Adds multi-goal shortest path ..."
-    # (fetchpatch {
-    #   url = "https://github.com/recastnavigation/recastnavigation/commit/02be4986e3f02c807443366cef56d33b75ad89dc.patch";
-    #   hash = "sha256-ygdhqdzGXZyRgCDM3vCxV6gQTH2u+zNBGu0ZfFCe6Pk=";
-    # })
-    # # "Fix 64bit pointer arithmetic warnings"
-    # (fetchpatch {
-    #   url = "https://github.com/recastnavigation/recastnavigation/commit/7a2363f8ebf4b3cfecfdc07f9b4c72ae9aeba4de.patch";
-    #   # Hmm?
-    #   hash = "sha256-ygdhqdzGXZyRgCDM3vCxV6gQTH2u+zNBGu0ZfFCe6Pk=";
-    # })
-    # # "Hacky fix for ESP"
-    # (fetchpatch {
-    #   url = "https://github.com/recastnavigation/recastnavigation/commit/5c7ef6fea3b43abda5b0daa982be265d23d0664c.patch";
-    #   hash = "sha256-JLU39Cgss3nWXy6L/8x02tz4+pM9vjap6RW4XiRdvx8=";
-    # })
+    # "No sliding try step"
+    (fetchpatch {
+      url = "https://github.com/recastnavigation/recastnavigation/commit/43d050d0326c8d47c1de615103d2fb9ac01f426b.patch";
+      hash = "sha256-o/+vcve2aSJYFa5nMeeRICotKXpidTIBTfHhE+32wDM=";
+    })
+
+    # "habitat: unbreak signature mismatch"
+    (fetchpatch {
+      url = "https://github.com/recastnavigation/recastnavigation/commit/8e634a30b7c001b61f2bf718452aa1dff056a417.patch";
+      hash = "sha256-cqF0E9enKGNr/vq8gZlUMqHS/cQpjzkZXthzc8OJtqo=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
