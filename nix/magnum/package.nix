@@ -5,6 +5,7 @@
   cmake,
   corrade,
   libGL,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,10 +23,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     corrade
     libGL # A shim that resolves into libglvnd on Linux
+  ] ++ lib.optionals stdenv.hostPlatform.isUnix [
+    xorg.libX11
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "MAGNUM_WITH_EIGEN" true)
+    (lib.cmakeBool "MAGNUM_WITH_ANYIMAGEIMPORTER" true)
+    (lib.cmakeBool "MAGNUM_WITH_ANYSCENEIMPORTER" true)
+    (lib.cmakeBool "MAGNUM_WITH_ANYIMAGECONVERTER" true)
+    (lib.cmakeBool "MAGNUM_WITH_WINDOWLESSGLXAPPLICATION" true)
   ];
 
   meta = with lib; {

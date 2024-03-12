@@ -3,9 +3,11 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  bullet,
   corrade,
   eigen,
   magnum,
+  libGL,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,13 +23,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    eigen
+    (lib.getDev bullet)
     corrade
+    eigen
     magnum
+    libGL
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "MAGNUM_WITH_EIGEN" true)
+    (lib.cmakeBool "MAGNUM_WITH_BULLET" true)
   ];
 
   meta = with lib; {

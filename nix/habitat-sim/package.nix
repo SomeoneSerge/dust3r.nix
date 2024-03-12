@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  stdenv,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -18,6 +19,7 @@
   pillow,
   scipy,
   tqdm,
+  bullet,
   eigen,
   openexr,
   glfw3,
@@ -26,9 +28,11 @@
   assimp,
   corrade,
   magnum,
-  magnum-integration,
   magnum-bindings,
-  recastnavigation
+  magnum-integration,
+  magnum-plugins,
+  recastnavigation,
+  xorg,
 }:
 
 buildPythonPackage rec {
@@ -43,15 +47,14 @@ buildPythonPackage rec {
     hash = "sha256-vTXBg3PUmXFn6nyGIGEap+LEW5KftnIXfk4qIp4T9SU=";
   };
 
-  patches = [
-    ./0001-cmake-recastnavigation-allow-dependency-injection.patch
-  ];
+  patches = [ ./0001-cmake-recastnavigation-allow-dependency-injection.patch ];
   postPatch = ''
     sed -i 's|option(USE_SYSTEM_\(.*\) OFF)|option(USE_SYSTEM_\1 ON)|' src/CMakeLists.txt
     substituteInPlace src/esp/gfx/CMakeLists.txt \
       --replace-fail \
         "MagnumIntegration REQUIRED Eigen" \
         "MagnumIntegration COMPONENTS Eigen"
+    rm src/cmake/FindMagnumBindings.cmake
   '';
 
   nativeBuildInputs = [
@@ -63,6 +66,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    (lib.getDev bullet)
     eigen
     openexr
     glfw3
@@ -71,10 +75,11 @@ buildPythonPackage rec {
     assimp
     corrade
     magnum
-    magnum-integration
     magnum-bindings
+    magnum-integration
+    magnum-plugins
     recastnavigation
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isUnix [ xorg.libX11 ];
 
   propagatedBuildInputs = [
     attrs
@@ -91,6 +96,15 @@ buildPythonPackage rec {
   ];
 
   dontUseCmakeConfigure = true;
+  preConfigure = ''
+    export CMAKE_ARGS=$cmakeFlags
+  '';
+
+  cmakeFlags = [
+    (lib.cmakeFeature "MAGNUMINTEGRATION_INCLUDE_DIR" "${lib.getDev magnum-integration}/include")
+    (lib.cmakeFeature "MAGNUMPLUGINS_INCLUDE_DIR" "${lib.getDev magnum-plugins}/include")
+    (lib.cmakeFeature "MAGNUMBINDINGS_INCLUDE_DIR" "${lib.getDev magnum-bindings}/include")
+  ];
 
   pythonImportsCheck = [ "habitat_sim" ];
 
