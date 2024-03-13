@@ -50,7 +50,6 @@ buildPythonPackage rec {
     description = "Naverlab's CroCo model presented at the NeurIPS'22";
     homepage = "https://github.com/naver/croco";
     license = licenses.cc-by-nc-sa-40;
-    mainProgram = "croco";
     maintainers = with maintainers; [ SomeoneSerge ];
     platforms = platforms.all;
   };
