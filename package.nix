@@ -63,6 +63,10 @@ buildPythonPackage {
   # Training and evaluation scripts &c
   postPatch = ''
     mv *.py dust3r/
+    cat << EOF >> pyproject.toml
+    [project.scripts]
+    dust3r-demo = "dust3r.demo:main"
+    EOF
   '';
 
   nativeBuildInputs = [
@@ -83,14 +87,6 @@ buildPythonPackage {
     croco
     torch-batch-svd
   ];
-
-  postInstall = ''
-    mkdir -p "''${!outputBin}/bin"
-    makeWrapper ${python.interpreter} "''${!outputBin}/bin/dust3r-demo" \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --add-flags "-m" \
-      --add-flags "dust3r.demo"
-  '';
 
   passthru.optional-dependencies.dev = [ tensorboard ];
   pythonImportsCheck = [ "dust3r" ];
