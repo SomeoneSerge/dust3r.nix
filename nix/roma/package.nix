@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "roma";
-  version = "1.2.1";
+  version = "unstable-2024-02-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "naver";
     repo = "roma";
-    rev = "v${version}";
-    hash = "sha256-Rb6EaiDAntg6PaDIwn9V3oZYYV+qUOSFE8gBvfkAggU=";
+    rev = "1c2739571d06a746723fc552203ff7e844ea2ad3";
+    hash = "sha256-ROfa9JODUK5+yVxdDW3+9vILgUhTzxfN362e5iNIL9U=";
   };
 
   nativeBuildInputs = [
