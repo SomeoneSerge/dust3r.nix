@@ -262,7 +262,7 @@ def main_demo(tmpdirname, model, device, image_size, server_name, server_port):
     demo.launch(share=False, server_name=server_name, server_port=server_port)
 
 
-if __name__ == '__main__':
+def main():
     parser = get_args_parser()
     args = parser.parse_args()
 
@@ -281,3 +281,7 @@ if __name__ == '__main__':
     with tempfile.TemporaryDirectory(suffix='dust3r_gradio_demo') as tmpdirname:
         print('Outputing stuff in', tmpdirname)
         main_demo(tmpdirname, model, args.device, args.image_size, server_name, args.server_port)
+
+
+if __name__ == "__main__":
+    main()
