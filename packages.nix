@@ -1,22 +1,6 @@
-with import <nixpkgs> {
-  # "Non-commercial" considered unfree
-  config.allowUnfreePredicate =
-    p:
-    builtins.elem p.meta.license.shortName [
-      "cc-by-nc-40"
-      "cc-by-nc-sa-40"
-      "CUDA EULA"
-      "cuDNN EULA"
-    ];
-  config.cudaSupport = true;
-  config.cudaCapabilities = [
-    "7.0"
-    "8.0"
-    "8.6"
-  ];
-  config.cudaEnableForwardCompat = false;
-};
-lib.makeScope python3Packages.newScope (
+{ lib, pythonPackages }:
+
+lib.makeScope pythonPackages.newScope (
   self:
   {
     dust3r = self.callPackage ./package.nix { };
