@@ -12,7 +12,7 @@ CROCO_REPO_PATH = path.normpath(path.join(HERE_PATH, '../../croco'))
 CROCO_MODELS_PATH = path.join(CROCO_REPO_PATH, 'models')
 # check the presence of models directory in repo to be sure its cloned
 try:
-    import croco
+    import models.croco
 except ImportError:
     if path.isdir(CROCO_MODELS_PATH):
         # workaround for sibling import

@@ -4,6 +4,8 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  config,
+  withCuda ? config.cudaSupport,
   ninja,
   pip,
   setuptools,
@@ -117,6 +119,7 @@ buildPythonPackage rec {
     (lib.cmakeFeature "MAGNUMINTEGRATION_INCLUDE_DIR" "${lib.getDev magnum-integration}/include")
     (lib.cmakeFeature "MAGNUMPLUGINS_INCLUDE_DIR" "${lib.getDev magnum-plugins}/include")
     (lib.cmakeFeature "MAGNUMBINDINGS_INCLUDE_DIR" "${lib.getDev magnum-bindings}/include")
+    (lib.cmakeBool "BUILD_WITH_CUDA" withCuda)
   ];
 
   pythonRelaxDeps = [ "numpy" ];

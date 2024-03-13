@@ -7,4 +7,4 @@ name = "croco"
 version = "2024.03.12"
 
 [tool.setuptools.packages.find]
-include = [ "croco*" ]
+where = [ "" ]
