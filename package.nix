@@ -15,6 +15,7 @@
   tqdm,
   trimesh,
   python,
+  croco,
   makeWrapper,
 }:
 
@@ -78,6 +79,7 @@ buildPythonPackage {
     torchvision
     tqdm
     trimesh
+    croco
   ];
 
   postInstall = ''

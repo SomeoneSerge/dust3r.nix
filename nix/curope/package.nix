@@ -4,6 +4,8 @@
   fetchFromGitHub,
   setuptools,
   wheel,
+  which,
+  buildPackages,
   croco,
   torch,
   cudaPackages,
@@ -12,7 +14,6 @@
   ipywidgets,
   matplotlib,
   notebook,
-  pytorch,
   torchvision,
   typing-extensions,
   widgetsnbextension,
@@ -30,22 +31,27 @@ buildPythonPackage rec {
 
   src = "${croco.src}/models/curope";
 
+  # Making pytorch'es useless _find_cuda_home() not fail
+  env.CUDA_HOME = "${buildPackages.cudaPackages.cuda_nvcc}";
+  env.TORCH_CUDA_ARCH_LIST = builtins.concatStringsSep ";" torch.cudaCapabilities;
+
   nativeBuildInputs = [
     setuptools
     wheel
+    which # for pytorch'es useless cpp_extension
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs =
+  buildInputs = [ (lib.getOutput "cxxdev" torch) ];
+  propagatedBuildInputs =
     [
-      (lib.getOutput "cxxdev" torch)
       typing-extensions
       habitat-sim
       ipykernel
       ipywidgets
       matplotlib
       notebook
-      pytorch
+      torch
       torchvision
       widgetsnbextension
     ]
