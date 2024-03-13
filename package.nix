@@ -12,6 +12,7 @@
   tensorboard,
   torch,
   torchvision,
+  torch-batch-svd,
   tqdm,
   trimesh,
   python,
@@ -80,6 +81,7 @@ buildPythonPackage {
     tqdm
     trimesh
     croco
+    torch-batch-svd
   ];
 
   postInstall = ''
