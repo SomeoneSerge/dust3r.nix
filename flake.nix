@@ -42,6 +42,8 @@
                   "8.6"
                 ];
                 config.cudaEnableForwardCompat = false;
+
+                overlays = [ inputs.self.overlays.nixpkgs-fixes ];
               };
             };
         }
@@ -73,6 +75,41 @@
             (py-fin: py-pre: { dust3rPackages = py-fin.callPackage ./packages.nix { }; })
           ];
           inherit (final.python3Packages) dust3rPackages;
+        };
+        overlays.nixpkgs-fixes = final: prev: {
+          pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+            (py-fin: py-pre: {
+
+              # https://github.com/NixOS/nixpkgs/pull/295653 (CDLL abuse)
+              numba =
+                (py-pre.numba.override {
+                  cudaPackages = final.cudaPackages.overrideScope (fi: pre: { cudatoolkit = fi.cuda_nvcc; });
+                }).overridePythonAttrs
+                  (oldAttrs: {
+                    nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [ final.cudaPackages.cuda_cudart ];
+                    buildInputs = oldAttrs.buildInputs or [ ] ++ [ final.cudaPackages.cuda_cudart ];
+                    propagatedBuildInputs = builtins.filter (
+                      p: !(prev.lib.hasPrefix "cuda" p.pname)
+                    ) oldAttrs.propagatedBuildInputs;
+                  });
+
+              # https://github.com/NixOS/nixpkgs/issues/296179 (dlopen("libnvrtc", ...) abuse)
+              torch = py-pre.torch.overridePythonAttrs (oldAttrs: {
+                extraRunpaths = [ "${prev.lib.getLib final.cudaPackages.cuda_nvrtc}/lib" ];
+                postPhases = prev.lib.optionals final.stdenv.hostPlatform.isUnix [ "postPatchelfPhase" ];
+                postPatchelfPhase = ''
+                  while IFS= read -r -d $'\0' elf ; do
+                    for extra in $extraRunpaths ; do
+                      echo patchelf "$elf" --add-rpath "$extra" >&2
+                      patchelf "$elf" --add-rpath "$extra"
+                    done
+                  done < <(
+                    find "''${!outputLib}" "$out" -type f -iname '*.so' -print0
+                  )
+                '';
+              });
+            })
+          ];
         };
       };
     };
