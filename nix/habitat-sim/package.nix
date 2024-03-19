@@ -68,7 +68,7 @@ buildPythonPackage rec {
       --replace-fail \
         "MagnumIntegration REQUIRED Eigen" \
         "MagnumIntegration COMPONENTS Eigen"
-    rm src/cmake/FindMagnumBindings.cmake
+    rm src/cmake/FindMagnum*.cmake
   '';
 
   nativeBuildInputs = [
@@ -116,9 +116,6 @@ buildPythonPackage rec {
   '';
 
   cmakeFlags = [
-    (lib.cmakeFeature "MAGNUMINTEGRATION_INCLUDE_DIR" "${lib.getDev magnum-integration}/include")
-    (lib.cmakeFeature "MAGNUMPLUGINS_INCLUDE_DIR" "${lib.getDev magnum-plugins}/include")
-    (lib.cmakeFeature "MAGNUMBINDINGS_INCLUDE_DIR" "${lib.getDev magnum-bindings}/include")
     (lib.cmakeBool "BUILD_WITH_CUDA" withCuda)
   ];
 

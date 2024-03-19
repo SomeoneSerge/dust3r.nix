@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosra";
     repo = "magnum-bindings";
-    rev = "16cd0ebead07f260b627bd978aaf7eba79a09941";
-    hash = "sha256-JKcPiI28O3Or3c9QmA1GsLNdaNy3voP5z6/DQenRh6k=";
+    rev = "a775640b027b1b541bd682300c1fe69d7f816a61";
+    hash = "sha256-yIjVpphDDroEWK+M8MyhqVD/14fVaQvynwkQfqKuHys=";
   };
 
   nativeBuildInputs = [
